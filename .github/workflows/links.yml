@@ -1,0 +1,17 @@
+name: Links
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 6 * * 1'
+
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --max-retries 3 --accept 200,206,429 readme.md contributing.md
+          fail: true
