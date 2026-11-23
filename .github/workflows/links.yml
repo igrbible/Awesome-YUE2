@@ -11,7 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # github.com answers a bare robot's request for a file page with 503 now and then (23.11.2026: seven live links, each 200 in a browser):
+      # the robot speaks as a browser, asks github.com with the workflow's own token and waits between tries; a 503 still fails the run
       - uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-progress --max-retries 3 --accept 200,206,429 readme.md contributing.md
+          args: --no-progress --max-retries 4 --retry-wait-time 15 --user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36" --accept 200,206,429 readme.md contributing.md
+          token: ${{ secrets.GITHUB_TOKEN }}
           fail: true
